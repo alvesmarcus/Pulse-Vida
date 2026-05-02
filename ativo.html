@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+
+<link rel="stylesheet" href="Css/ativo.css">
+<link rel="icon" type="image/png" href="imagens/favicon.png">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#2aa7fa">
+<title>Medicações Ativas</title>
+</head>
+
+<body>
+
+<header class="topo">
+
+  <div class="logo-topo" onclick="voltar()">
+    <img src="imagens/logo_pulsevida.png">
+    <span>Medicações Ativas</span>
+  </div>
+
+
+
+</header>
+
+<div class="container">
+  <div id="lista"></div>
+</div>
+
+<script>
+
+// 🔙 VOLTAR
+function voltar(){
+  window.location.href = "medico.html";
+}
+
+// ===============================
+// 📦 DADOS
+// ===============================
+const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+const pacientes = usuarios.filter(u => !u.tipo || u.tipo === "paciente");
+
+const div = document.getElementById("lista");
+
+// ===============================
+// 🧠 CLASSIFICAR PRESSÃO
+// ===============================
+function classificarPressao(pressao){
+
+  if(!pressao) return "normal";
+
+  const [sis, dia] = pressao.split("/").map(Number);
+
+  if(sis >= 180 || dia >= 120) return "critico";
+  if(sis >= 140 || dia >= 90) return "alerta";
+
+  return "normal";
+}
+
+// ===============================
+// 💊 FORMATAR QUANTIDADE
+// ===============================
+function formatarQtd(qtd){
+  if(!qtd) return "-";
+
+  if(qtd.toLowerCase().includes("comprimido")) return qtd;
+
+  return qtd + " comprimidos";
+}
+
+// ===============================
+// ⏰ FORMATAR HORÁRIO
+// ===============================
+function formatarHorario(horario){
+  if(!horario) return "-";
+
+  return horario
+    .split(",")
+    .map(h => `<span class="chip-hora">${h.trim()}</span>`)
+    .join(" ");
+}
+
+// ===============================
+// 🔥 RENDER
+// ===============================
+div.innerHTML = "";
+
+pacientes.forEach(p => {
+
+  const meds = JSON.parse(localStorage.getItem("medicacoes_" + p.cpf)) || [];
+  const dados = JSON.parse(localStorage.getItem("dadosSaude_" + p.cpf));
+
+  if(meds.length === 0) return;
+
+  const pressao = dados?.pressao || "-";
+  const classe = classificarPressao(pressao);
+
+  div.innerHTML += `
+    <div class="paciente-card">
+
+      <h3>${p.nome}</h3>
+      <div class="cpf">CPF: ${p.cpf}</div>
+
+      <div class="pressao-box ${classe}">
+        <span>Pressão registrada</span>
+        <strong>${pressao}</strong>
+      </div>
+
+      <div class="med-list">
+
+        ${meds.map(m => `
+          <div class="med-item">
+
+            <div>
+              <strong>${m.nome}</strong>
+
+              <div class="med-info">
+                ${m.dose} mg • ${formatarQtd(m.qtd)}
+              </div>
+            </div>
+
+            <div class="med-horario">
+              <span class="titulo-horario">Horário da medicação</span><br>
+              ${formatarHorario(m.horario)}
+            </div>
+
+          </div>
+        `).join("")}
+
+      </div>
+
+    </div>
+  `;
+});
+
+// ===============================
+if(div.innerHTML === ""){
+  div.innerHTML = "<div class='vazio'>Nenhuma medicação encontrada</div>";
+}
+
+</script>
+<script src="app.js"></script>
+</body>
+</html>

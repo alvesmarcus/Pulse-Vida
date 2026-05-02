@@ -1,0 +1,186 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial;
+  background: #f2f6fb;
+}
+
+/* ===== HEADER ===== */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 15px 30px;
+}
+
+.logo img {
+  height: 60px;
+}
+
+.area-login {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-login {
+  background: #0a84ff;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+.btn-login:hover {
+  background: #0066cc;
+}
+
+/* ===== CONTAINER ===== */
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 60px;
+  gap: 40px;
+}
+
+/* ===== SLIDER ===== */
+.slider {
+  max-width: 500px;
+}
+
+.slides {
+  position: relative;
+}
+
+.slide {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.slide.ativo {
+  display: block;
+  opacity: 1;
+}
+
+/* ===== BOTÕES ===== */
+.controles {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+}
+
+.controles button {
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 50%;
+  background: #0a84ff;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+  transition: 0.2s;
+}
+
+.controles button:hover {
+  background: #0066cc;
+}
+
+/* ===== IMAGEM ===== */
+.imagem img {
+  width: 350px;
+  border-radius: 20px;
+  transition: opacity 0.5s ease;
+}
+
+/* ===== SEÇÕES ===== */
+.info {
+  padding: 60px;
+  text-align: center;
+}
+
+.cards {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  width: 250px;
+  box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* ===== SOBRE ===== */
+.sobre-container {
+  display: flex;
+  gap: 40px;
+  padding: 60px;
+  align-items: center;
+}
+
+.sobre-img img {
+  width: 400px;
+  border-radius: 20px;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  background: #178f87;
+  color: white;
+  padding: 40px;
+  margin-top: 40px;
+}
+
+/* layout geral */
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* lado esquerdo */
+.footer-contato {
+  text-align: left;
+}
+
+.footer-contato img {
+  width: 20px;
+}
+
+/* central */
+.footer-centro {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.footer-centro img {
+  width: 80px;
+  margin-bottom: 10px;
+}
+
+/* icones */
+.whatsapp, .email {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}

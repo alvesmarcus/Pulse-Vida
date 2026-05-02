@@ -1,0 +1,110 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial;
+}
+
+/* FUNDO */
+body {
+  min-height: 100vh;
+  background: 
+    linear-gradient(rgba(10,132,255,0.45), rgba(0,86,204,0.45)),
+    url("../imagens/doutor.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+/* HEADER */
+.topo {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 60px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  padding: 0 20px;
+
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(10px);
+
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+
+  z-index: 10;
+}
+
+/* BOTÃO VOLTAR */
+.btn-voltar {
+  width: auto; /* 🔥 ESSENCIAL */
+  background: #2aa7fa;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-voltar:hover {
+  background: #1d8ed8;
+}
+
+/* CONTAINER */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 120px;
+}
+
+/* CARD */
+.card-atendimento {
+  background: rgba(255,255,255,0.95);
+  padding: 30px;
+  border-radius: 20px;
+  width: 420px;
+
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* FORM */
+label {
+  font-weight: bold;
+}
+
+select, textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+textarea {
+  height: 100px;
+}
+
+/* CHECKBOX */
+.checkbox-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+/* BOTÃO PRINCIPAL */
+.card-atendimento button {
+  margin-top: 15px;
+  padding: 12px;
+  background: #0a84ff;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+}

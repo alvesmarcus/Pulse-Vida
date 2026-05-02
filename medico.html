@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="Css/medico.css">
+<link rel="icon" type="image/png" href="imagens/favicon.png">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#2aa7fa">
+<title>Painel Médico</title>
+</head>
+
+<body>
+
+<header class="topo-medico">
+  <h2>Painel Médico</h2>
+  <button onclick="logout()" class="btn-sair">Sair</button>
+</header>
+
+<!-- RESUMO -->
+<div class="cards-resumo">
+
+  <div class="card-resumo card-clickable" onclick="togglePacientes()">
+    <img src="imagens/pacientes.png" class="icon-card">
+    <h3>Pacientes</h3>
+    <p id="totalPacientes">0</p>
+  </div>
+
+  <div class="card-resumo card-clickable" onclick="irParaMedicacoes()">
+    <img src="imagens/medicacoes.png" class="icon-card">
+    <h3>Medicações Ativas</h3>
+    <p id="medicacoes">0</p>
+  </div>
+
+  <div class="card-resumo card-clickable" onclick="abrirModalConsultas()">
+    <img src="imagens/consultamedico.png" class="icon-card">
+    <h3>📊 Consultas</h3>
+    <p id="consultas">0</p>
+  </div>
+
+</div>
+
+<!-- PACIENTES -->
+<div id="areaPacientes" class="container-pacientes" style="display:none;">
+  <h2>👥 Pacientes</h2>
+
+  <input type="text" id="buscaPaciente" placeholder="Buscar paciente..." onkeyup="filtrarPacientes()">
+
+  <div id="listaPacientes"></div>
+</div>
+
+<!-- 💊 MODAL MEDICAÇÃO -->
+<div id="modalMedicacao" class="modal">
+  <div class="modal-content">
+
+    <h2>💊 Nova Medicação</h2>
+
+    <p id="pacienteNome"></p>
+
+    <div class="form-grid">
+
+  <div class="form-group">
+    <label>Medicamento *</label>
+    <select id="nomeMed">
+      <option value="">Selecionar</option>
+      <option>Losartana</option>
+      <option>Enalapril</option>
+      <option>Captopril</option>
+      <option>Amlodipino</option>
+      <option>Hidroclorotiazida</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Dosagem (mg) *</label>
+    <select id="doseMed">
+      <option value="">Selecionar</option>
+      <option>25</option>
+      <option>50</option>
+      <option>100</option>
+    </select>
+  </div>
+
+  <div class="form-group full">
+    <label>Quantidade por dia *</label>
+    <select id="qtdMed">
+      <option value="">Selecionar</option>
+      <option>1 vez ao dia</option>
+      <option>2 vezes ao dia</option>
+      <option>3 vezes ao dia</option>
+    </select>
+  </div>
+
+</div>
+
+    <label>Horários *</label>
+
+    <div class="horarios-duplo">
+
+      <div class="bloco-horario">
+        <label>Período Diurno</label>
+        <select id="horarioDia">
+          <option value="">Selecionar</option>
+          <option>08:00</option>
+          <option>10:00</option>
+          <option>12:00</option>
+          <option>14:00</option>
+          <option>16:00</option>
+        </select>
+      </div>
+
+      <div class="bloco-horario">
+        <label>Período Noturno</label>
+        <select id="horarioNoite">
+          <option value="">Selecionar</option>
+          <option>19:00</option>
+          <option>21:00</option>
+          <option>23:00</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div id="listaAtual"></div>
+
+    <div class="acoes-modal">
+      <button onclick="fecharModal()">Cancelar</button>
+      <button onclick="salvarMedicacao()">Adicionar</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- 👤 MODAL PACIENTE -->
+<div id="modalPaciente" class="modal">
+  <div class="modal-content">
+
+    <h2>👤 Dados do Paciente</h2>
+
+    <div class="info-box"><span>Nome</span><strong id="pNome"></strong></div>
+    <div class="info-box"><span>CPF</span><strong id="pCpf"></strong></div>
+    <div class="info-box"><span>Email</span><strong id="pEmail"></strong></div>
+    <div class="info-box"><span>Telefone</span><strong id="pTelefone"></strong></div>
+    <div class="info-box"><span>Data de Nascimento</span><strong id="pNascimento"></strong></div>
+    <div class="info-box"><span>Endereço</span><strong id="pEndereco"></strong></div>
+
+    <div class="acoes-modal">
+      <button onclick="fecharModalPaciente()">Fechar</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- 📊 MODAL CONSULTAS -->
+<div id="modalConsultas" class="modal">
+  <div class="modal-content">
+
+    <h2>📊 Consultas Agendadas</h2>
+
+    <div id="listaConsultas"></div>
+
+    <div class="acoes-modal">
+      <button onclick="fecharModalConsultas()">Fechar</button>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+<script>
+
+// ===============================
+const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+const pacientes = usuarios.filter(u => !u.tipo || u.tipo === "paciente");
+
+document.getElementById("totalPacientes").innerText = pacientes.length;
+
+// ===============================
+function atualizarMedicacoes(){
+  let total = 0;
+
+  pacientes.forEach(p => {
+    const meds = JSON.parse(localStorage.getItem("medicacoes_" + p.cpf)) || [];
+    total += meds.length;
+  });
+
+  document.getElementById("medicacoes").innerText = total;
+}
+
+// ===============================
+function atualizarConsultas(){
+  const lista = JSON.parse(localStorage.getItem("consultasRealizadas")) || [];
+  document.getElementById("consultas").innerText = lista.length;
+}
+
+// ===============================
+function togglePacientes(){
+  const area = document.getElementById("areaPacientes");
+  area.style.display = area.style.display === "none" ? "block" : "none";
+  renderPacientes(pacientes);
+}
+
+// ===============================
+function renderPacientes(lista){
+
+  const div = document.getElementById("listaPacientes");
+  div.innerHTML = "";
+
+  lista.forEach(p => {
+
+    const atendimento = JSON.parse(localStorage.getItem("ultimoAtendimento_" + p.cpf));
+    const resumo = JSON.parse(localStorage.getItem("resumoAtendimento_" + p.cpf));
+
+    let nivel = atendimento?.nivel || resumo?.nivel || "sem dados";
+    let cor = "gray";
+
+  if(nivel === "baixo") cor = "green";
+  if(nivel === "medio") cor = "orange";
+  if(nivel === "alto") cor = "darkorange";
+  if(nivel === "critico") cor = "red";
+  if(nivel === "sem dados") cor = "gray";
+
+    div.innerHTML += `
+      <div class="paciente-lista" onclick="abrirPaciente('${p.cpf}')">
+        <h3>${p.nome}</h3>
+        <p>CPF: ${p.cpf}</p>
+        <p><strong>Nível:</strong>
+        <span style="background:${cor};color:white;padding:4px 10px;border-radius:8px;">
+        ${nivel}</span></p>
+
+        <button onclick="event.stopPropagation(); abrirModalMedicacao('${p.cpf}', '${p.nome}')">
+          💊 Prescrever
+        </button>
+      </div>
+    `;
+  });
+}
+
+// ===============================
+function filtrarPacientes(){
+  const termo = document.getElementById("buscaPaciente").value.toLowerCase();
+  const filtrados = pacientes.filter(p => p.nome.toLowerCase().includes(termo));
+  renderPacientes(filtrados);
+}
+
+// ===============================
+function abrirPaciente(cpf){
+  const user = usuarios.find(u => u.cpf === cpf);
+
+  document.getElementById("pNome").innerText = user.nome || "-";
+  document.getElementById("pCpf").innerText = user.cpf || "-";
+  document.getElementById("pEmail").innerText = user.email || "-";
+  document.getElementById("pTelefone").innerText = user.telefone || "-";
+  document.getElementById("pNascimento").innerText = user.dataNascimento || "-";
+  document.getElementById("pEndereco").innerText =
+    (user.endereco || "-") + ", " + (user.numero || "-");
+
+  document.getElementById("modalPaciente").style.display = "flex";
+}
+
+function fecharModalPaciente(){
+  document.getElementById("modalPaciente").style.display = "none";
+}
+
+// ===============================
+let cpfSelecionado = null;
+
+function abrirModalMedicacao(cpf, nome){
+  cpfSelecionado = cpf;
+  document.getElementById("pacienteNome").innerText = "Paciente: " + nome;
+  document.getElementById("modalMedicacao").style.display = "flex";
+}
+
+function fecharModal(){
+  document.getElementById("modalMedicacao").style.display = "none";
+}
+
+// ===============================
+function salvarMedicacao(){
+
+  const nome = document.getElementById("nomeMed").value;
+  const dose = document.getElementById("doseMed").value;
+  const qtd = document.getElementById("qtdMed").value;
+
+  const dia = document.getElementById("horarioDia").value;
+  const noite = document.getElementById("horarioNoite").value;
+
+  const horario = [dia, noite].filter(h => h !== "").join(", ");
+
+  if(!nome || !dose || !qtd || !horario){
+    alert("Preencha tudo!");
+    return;
+  }
+
+  let lista = JSON.parse(localStorage.getItem("medicacoes_" + cpfSelecionado)) || [];
+
+  lista.push({
+    nome,
+    dose,
+    qtd,
+    horario
+  });
+
+  localStorage.setItem("medicacoes_" + cpfSelecionado, JSON.stringify(lista));
+
+  alert("Medicação adicionada!");
+
+  fecharModal();
+  atualizarMedicacoes();
+}
+
+// ===============================
+function abrirModalConsultas(){
+
+  const lista = JSON.parse(localStorage.getItem("consultasRealizadas")) || [];
+  const div = document.getElementById("listaConsultas");
+
+  if(lista.length === 0){
+    div.innerHTML = "<p>Nenhuma consulta encontrada</p>";
+  } else {
+    div.innerHTML = lista.map(c => `
+      <div class="consulta-item">
+        <strong>${c.paciente?.nome || "-"}</strong><br>
+        🏥 ${c.unidade}<br>
+        📅 ${c.data}<br>
+        ⏰ ${c.horario}
+      </div>
+    `).join("");
+  }
+
+  document.getElementById("modalConsultas").style.display = "flex";
+}
+
+function fecharModalConsultas(){
+  document.getElementById("modalConsultas").style.display = "none";
+}
+
+
+
+function irParaMedicacoes(){
+  window.location.href = "ativo.html";
+}
+// ===============================
+function logout(){
+  localStorage.removeItem("cpfLogado");
+  localStorage.removeItem("tipoUsuario");
+  window.location.href = "login.html";
+}
+
+// ===============================
+atualizarMedicacoes();
+atualizarConsultas();
+
+</script>
+<script src="app.js"></script>
+</body>
+</html>

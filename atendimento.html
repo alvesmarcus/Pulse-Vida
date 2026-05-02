@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="Css/atendimento.css">
+<link rel="icon" type="image/png" href="imagens/favicon.png">
+<title>Atendimento</title>
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#2aa7fa">
+</head>
+
+<body>
+
+<header class="topo">
+  <button class="btn-voltar" onclick="voltar()">← Voltar</button>
+</header>
+
+<div class="container">
+
+  <div class="card-atendimento">
+
+    <label>Tipo de atendimento</label>
+    <select id="tipo" onchange="mudarSintomas()">
+      <option value="geral">Consulta geral</option>
+      <option value="pressao">Pressão alta</option>
+      <option value="sintomas">Tipos de sintomas</option>
+      <option value="medicamento">Reação a medicamento</option>
+    </select>
+
+    <div id="sintomasContainer"></div>
+
+    <textarea id="mensagem" placeholder="Ex: Estou com tontura há 2 horas..."></textarea>
+
+    <p id="nivelUrgencia" style="font-weight:bold; margin-top:10px;"></p>
+
+    <button onclick="analisar()">Analisar</button>
+
+  </div>
+
+</div>
+
+<script>
+
+if (localStorage.getItem("tipoUsuario") !== "paciente") {
+  window.location.href = "login.html";
+}
+
+const cpf = localStorage.getItem("cpfLogado");
+
+// 🔄 TROCAR SINTOMAS
+function mudarSintomas() {
+
+  const tipo = document.getElementById("tipo").value;
+  const container = document.getElementById("sintomasContainer");
+
+  let html = "<label>Sintomas</label><div class='checkbox-group'>";
+
+  if (tipo === "geral") {
+    html += `
+      <label><input type="checkbox" name="Dor leve" value="baixo"> <span style="color:green">Dor leve</span></label>
+      <label><input type="checkbox" name="Cansaço" value="baixo"> <span style="color:green">Cansaço</span></label>
+      <label><input type="checkbox" name="Febre leve" value="medio"> <span style="color:orange">Febre leve</span></label>
+    `;
+  }
+
+  if (tipo === "pressao") {
+    html += `
+      <label><input type="checkbox" name="Tontura" value="medio"> <span style="color:orange">Tontura</span></label>
+      <label><input type="checkbox" name="Falta de ar" value="alto"> <span style="color:red">Falta de ar</span></label>
+      <label><input type="checkbox" name="Dor no peito" value="alto"> <span style="color:red">Dor no peito</span></label>
+    `;
+  }
+
+  html += "</div>";
+  container.innerHTML = html;
+}
+
+mudarSintomas();
+
+
+// 🔍 ANALISAR
+function analisar() {
+
+  const checks = document.querySelectorAll("input[type=checkbox]:checked");
+
+  let nivelFinal = "baixo";
+  let sintomasMarcados = [];
+
+  checks.forEach(c => {
+    sintomasMarcados.push(c.name);
+
+    if (c.value === "alto") nivelFinal = "alto";
+    else if (c.value === "medio" && nivelFinal !== "alto") nivelFinal = "medio";
+  });
+
+  let mensagem = "";
+
+  if (nivelFinal === "baixo") mensagem = "Tudo certo 👍";
+  if (nivelFinal === "medio") mensagem = "Fique atento ⚠️";
+  if (nivelFinal === "alto") mensagem = "Procure atendimento 🏥";
+
+  document.getElementById("nivelUrgencia").innerText = mensagem;
+
+  // 🔥 PEGAR DADOS DE PRESSÃO
+  const dados = JSON.parse(localStorage.getItem("dadosSaude_" + cpf));
+  const pressao = dados?.pressao || "-";
+  const bpm = dados?.bpm || "-";
+
+  const tipoAtendimento = document.getElementById("tipo").value;
+  const descricao = document.getElementById("mensagem").value;
+
+  // 🔥 RESUMO
+  localStorage.setItem("resumoAtendimento_" + cpf, JSON.stringify({
+    nivel: nivelFinal,
+    mensagem: mensagem
+  }));
+
+  // 🔥 ATENDIMENTO COMPLETO
+  localStorage.setItem("ultimoAtendimento_" + cpf, JSON.stringify({
+    tipo: tipoAtendimento,
+    sintomas: sintomasMarcados,
+    descricao: descricao,
+    pressao: pressao,
+    bpm: bpm,
+    nivel: nivelFinal
+  }));
+
+  setTimeout(() => {
+    window.location.href = "aba_a.html";
+  }, 1200);
+}
+
+
+// 🔙 VOLTAR
+function voltar() {
+  window.location.href = "aba_a.html";
+}
+
+</script>
+
+</body>
+</html>

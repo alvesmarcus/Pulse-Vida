@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="Css/Cadastro.css">
+<link rel="icon" type="image/png" href="imagens/favicon.png">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#2aa7fa">
+<title>Cadastro</title>
+</head>
+
+<body>
+
+<div class="cadastro-container">
+
+<h2>Criar Conta</h2>
+
+<form onsubmit="cadastrar(event)">
+
+<input id="nome" placeholder="Nome" required>
+<input id="email" placeholder="Email" required>
+<input type="password" id="senha" placeholder="Senha" required>
+<input id="cpf" placeholder="CPF" maxlength="11"
+oninput="this.value = this.value.replace(/\D/g, '')" required>
+
+<input type="date" id="dataNascimento" onchange="calcularIdade()" required>
+<input id="idade" placeholder="Idade" readonly>
+
+<input id="cep" placeholder="CEP" maxlength="8"
+oninput="this.value = this.value.replace(/\D/g, '')"
+onblur="buscarCEP()" required>
+
+<input id="endereco" placeholder="Endereço">
+<input id="numero" placeholder="Número">
+<input id="cidade" placeholder="Cidade">
+<input id="estado" placeholder="Estado">
+
+<input id="sus" placeholder="Nº do SUS" maxlength="8"
+oninput="this.value = this.value.replace(/\D/g, '')" required>
+
+<input id="telefone" placeholder="(00) 00000-0000"
+oninput="formatarTelefone(this)">
+
+<button type="submit">Cadastrar</button>
+
+</form>
+
+</div>
+
+<script>
+
+function calcularIdade() {
+  const data = document.getElementById("dataNascimento").value;
+  if (!data) return;
+
+  const hoje = new Date();
+  const nascimento = new Date(data);
+
+  let idade = hoje.getFullYear() - nascimento.getFullYear();
+  const m = hoje.getMonth() - nascimento.getMonth();
+
+  if (m < 0 || (m === 0 && hoje.getDate() < nascimento.getDate())) idade--;
+
+  document.getElementById("idade").value = idade;
+}
+
+function buscarCEP() {
+  const cep = document.getElementById("cep").value;
+  if (cep.length !== 8) return;
+
+  fetch(`https://viacep.com.br/ws/${cep}/json/`)
+    .then(res => res.json())
+    .then(dados => {
+      document.getElementById("endereco").value = dados.logradouro || "";
+      document.getElementById("cidade").value = dados.localidade || "";
+      document.getElementById("estado").value = dados.uf || "";
+    });
+}
+
+function formatarTelefone(input) {
+  let v = input.value.replace(/\D/g, "");
+  if (v.length > 11) v = v.slice(0, 11);
+
+  if (v.length > 6) {
+    input.value = `(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;
+  } else if (v.length > 2) {
+    input.value = `(${v.slice(0,2)}) ${v.slice(2)}`;
+  } else {
+    input.value = v;
+  }
+}
+
+function cadastrar(e) {
+  e.preventDefault();
+
+  const usuario = {
+    tipo: "paciente", // 🔥 ESSENCIAL
+    nome: nome.value,
+    email: email.value,
+    senha: senha.value,
+    cpf: cpf.value,
+    sus: sus.value,
+    dataNascimento: dataNascimento.value,
+    idade: idade.value,
+    cep: cep.value,
+    endereco: endereco.value,
+    numero: numero.value,
+    cidade: cidade.value,
+    estado: estado.value,
+    telefone: telefone.value
+  };
+
+  let lista = JSON.parse(localStorage.getItem("usuarios")) || [];
+
+  if (lista.some(u => u.cpf === usuario.cpf)) {
+    alert("CPF já cadastrado");
+    return;
+  }
+
+  lista.push(usuario);
+  localStorage.setItem("usuarios", JSON.stringify(lista));
+
+  localStorage.setItem("cpfLogado", usuario.cpf);
+  localStorage.setItem("tipoUsuario", "paciente");
+
+  alert("Cadastro realizado!");
+  window.location.href = "aba_a.html";
+}
+
+</script>
+<script src="app.js"></script>
+</body>
+</html>

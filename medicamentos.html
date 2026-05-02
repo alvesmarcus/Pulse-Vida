@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="Css/medicamentos.css">
+<link rel="icon" type="image/png" href="imagens/favicon.png">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#2aa7fa">
+<title>Medicamentos</title>
+</head>
+
+<body>
+
+<header class="topo">
+  <button class="btn-voltar" onclick="voltar()">← Voltar</button>
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <h2>💊 Minhas Medicações</h2>
+
+    <div id="listaMeds"></div>
+
+  </div>
+
+</div>
+
+<script>
+
+
+function voltar(){
+  window.location.href = "aba_a.html";
+}
+
+const cpf = localStorage.getItem("cpfLogado");
+
+const lista = JSON.parse(localStorage.getItem("medicacoes_" + cpf)) || [];
+
+const div = document.getElementById("listaMeds");
+
+div.innerHTML = "";
+
+// 🔥 FORMATA QUANTIDADE
+function formatarQtd(qtd){
+  if(!qtd) return "-";
+
+  if(qtd.toLowerCase().includes("comprimido")) return qtd;
+
+  return qtd + " comprimidos";
+}
+
+// 🔥 FORMATA HORÁRIO EM "CHIPS"
+function formatarHorario(horario){
+  if(!horario) return "-";
+
+  return horario
+    .split(",")
+    .map(h => `<span class="chip-hora">${h.trim()}</span>`)
+    .join("");
+}
+
+// 🔥 RENDER
+if(lista.length === 0){
+  div.innerHTML = "<p class='vazio'>Nenhuma medicação prescrita.</p>";
+}
+
+lista.forEach(m => {
+
+  div.innerHTML += `
+    <div class="med-card">
+
+      <div class="med-esquerda">
+        <strong>${m.nome}</strong>
+
+        <div class="med-info">
+          ${m.dose} mg • ${formatarQtd(m.qtd)}
+        </div>
+      </div>
+
+      <div class="med-direita">
+        <span class="titulo-horario">Horário da medicação</span>
+
+        <div class="horarios">
+          ${formatarHorario(m.horario)}
+        </div>
+      </div>
+
+    </div>
+  `;
+});
+
+</script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial;
+}
+
+body{
+  min-height:100vh;
+  background: 
+    linear-gradient(rgba(30, 120, 255, 0.25), rgba(30, 120, 255, 0.25)),
+    url("../imagens/doutor.jpg");
+    
+  background-size:cover;
+  background-position:center;
+}
+
+/* ================= TOPO ================= */
+.topo{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 30px;
+  background:rgba(255,255,255,0.95);
+  box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+.topo button{
+  padding:8px 15px;
+  border:none;
+  background:#0a84ff;
+  color:white;
+  border-radius:10px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.topo button:hover{
+  background:#006fe0;
+}
+
+/* ================= LOGO ================= */
+.logo-topo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  cursor:pointer;
+}
+
+.logo-topo img{
+  width:45px;
+}
+
+.logo-topo span{
+  font-weight:bold;
+  font-size:18px;
+}
+
+/* ================= CONTAINER ================= */
+.container{
+  width:90%;
+  margin:30px auto;
+}
+
+/* ================= CARD PACIENTE ================= */
+.paciente-card{
+  background:white;
+  padding:22px;
+  border-radius:18px;
+  margin-bottom:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.18);
+  transition:0.2s;
+}
+
+.paciente-card:hover{
+  transform:translateY(-3px);
+}
+
+.paciente-card h3{
+  margin-bottom:5px;
+  font-size:20px;
+}
+
+/* ================= CPF ================= */
+.cpf{
+  font-size:14px;
+  color:gray;
+  margin-bottom:15px;
+}
+
+/* ================= PRESSÃO ================= */
+.pressao-box{
+  margin-top:10px;
+  padding:15px;
+  border-radius:14px;
+  border-left:8px solid red;
+  background:#ffe5e5;
+}
+
+.pressao-box span{
+  font-size:13px;
+  color:#555;
+}
+
+.pressao-box strong{
+  display:block;
+  font-size:24px;
+  font-weight:bold;
+  letter-spacing:1px;
+}
+
+/* ================= CORES DINÂMICAS ================= */
+.pressao-box.normal{
+  background:#e6ffe6;
+  border-left:8px solid green;
+}
+
+.pressao-box.normal strong{
+  color:green;
+}
+
+.pressao-box.alerta{
+  background:#fff4e5;
+  border-left:8px solid orange;
+}
+
+.pressao-box.alerta strong{
+  color:orange;
+}
+
+.pressao-box.critico{
+  background:#ffe5e5;
+  border-left:8px solid red;
+}
+
+.pressao-box.critico strong{
+  color:red;
+}
+
+/* ================= LISTA ================= */
+.med-list{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin-top:15px;
+}
+
+/* ================= ITEM MED ================= */
+.med-item{
+  background:#eef3ff;
+  padding:15px 18px;
+  border-radius:14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  transition:0.2s;
+}
+
+.med-item:hover{
+  transform:scale(1.02);
+  background:#e4ecff;
+}
+
+/* ================= TEXTO ================= */
+.med-item strong{
+  font-size:16px;
+}
+
+.med-info{
+  font-size:13px;
+  color:#666;
+  margin-top:2px;
+}
+
+.med-horario{
+  font-size:13px;
+  color:#111;
+  font-weight:bold;
+  background:#fff;
+  padding:6px 10px;
+  border-radius:8px;
+  box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* ================= VAZIO ================= */
+.vazio{
+  text-align:center;
+  margin-top:50px;
+  font-size:18px;
+  color:white;
+}
+
+
+
+.titulo-horario{
+  font-size:11px;
+  color:#666;
+}
+
+.chip-hora{
+  background:#fff;
+  padding:4px 8px;
+  border-radius:8px;
+  margin-right:5px;
+  font-size:12px;
+  box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}

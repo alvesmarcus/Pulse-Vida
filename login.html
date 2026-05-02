@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="Css/login.css">
+<link rel="icon" type="image/png" href="imagens/favicon.png">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#2aa7fa">
+<title>Login</title>
+</head>
+
+<body>
+
+<header>
+  <a href="index.html" class="logo">
+    <img src="imagens/logo_pulsevida.png">
+  </a>
+</header>
+
+<div class="login-wrapper">
+  <div class="login-container">
+
+    <h2>Login</h2>
+
+    <form onsubmit="login(event)">
+
+      <input 
+        type="text" 
+        id="usuario"
+        placeholder="CPF"
+        maxlength="11"
+        required
+        oninput="this.value = this.value.replace(/\D/g, '')"
+      >
+
+      <input 
+        type="password" 
+        id="senha"
+        placeholder="Senha"
+        required
+      >
+
+      <button type="submit">Entrar</button>
+
+      <p>Não tem conta? <a href="tela_cadastro.html">Cadastrar</a></p>
+      
+
+    </form>
+
+  </div>
+</div>
+
+<script>
+
+
+function criarPacientePadrao(){
+  let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+
+  const existe = usuarios.some(u => u.cpf === "00116059796");
+
+  if(!existe){
+    usuarios.push({
+      tipo: "paciente",
+      nome: "Eduardo Onofre de Oliveira",
+      email: "edu.artonofre@gmail.com",
+      senha: "123456",
+      cpf: "00116059796",
+      dataNascimento: "1967-11-30",
+      idade: 58,
+      cep: "28990602",
+      endereco: "Travessa Zebino dos Santos",
+      numero: "101",
+      cidade: "Saquarema",
+      estado: "RJ",
+      sus: "33333333",
+      telefone: "(22) 99275-5885"
+    });
+
+    localStorage.setItem("usuarios", JSON.stringify(usuarios));
+  }
+}
+
+// 🔥 GARANTIR QUE SEMPRE EXISTE UM MÉDICO
+function criarMedicoPadrao(){
+  let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+
+  if(!usuarios.some(u => u.tipo === "medico")){
+    usuarios.push({
+      nome: "Medico",
+      senha: "123456",
+      cpf: "99999999999",
+      tipo: "medico"
+    });
+
+    localStorage.setItem("usuarios", JSON.stringify(usuarios));
+  }
+}
+
+criarMedicoPadrao();
+criarPacientePadrao();
+
+
+// 🔐 LOGIN
+function login(e) {
+  e.preventDefault();
+
+  let cpf = document.getElementById("usuario").value;
+  const senha = document.getElementById("senha").value;
+
+  cpf = cpf.replace(/\D/g, "").trim();
+
+  const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+
+  const usuario = usuarios.find(u => u.cpf === cpf);
+
+  if (!usuario) {
+    alert("Usuário não encontrado!");
+    return;
+  }
+
+  if (usuario.senha !== senha) {
+    alert("Senha incorreta!");
+    return;
+  }
+
+  const usuariosPadrao = [
+  {
+    tipo: "medico",
+    cpf: "11111111111",
+    senha: "123"
+  },
+  {
+    tipo: "paciente",
+    nome: "Eduardo Onofre de Oliveira",
+    email: "edu.artonofre@gmail.com",
+    senha: "123456",
+    cpf: "00116059796",
+    dataNascimento: "1967-11-30",
+    idade: 58,
+    cep: "28990602",
+    endereco: "Travessa Zebino dos Santos",
+    numero: "101",
+    cidade: "Saquarema",
+    estado: "RJ",
+    sus: "33333333",
+    telefone: "(22) 99275-5885"
+  }
+];
+
+// Só cria se ainda não existir
+if (!localStorage.getItem("usuarios")) {
+  localStorage.setItem("usuarios", JSON.stringify(usuariosPadrao));
+}
+
+
+
+  // 🔥 AGORA SIM CORRETO
+  localStorage.setItem("cpfLogado", usuario.cpf);
+  localStorage.setItem("tipoUsuario", usuario.tipo);
+
+  // 🔥 REDIRECIONAMENTO CORRETO
+  if(usuario.tipo === "medico"){
+    window.location.href = "medico.html";
+  } else {
+    window.location.href = "aba_a.html";
+  }
+}
+
+</script>
+<footer class="footer">
+
+  <div class="footer-container">
+
+    <div class="footer-contato">
+      <h3>Para mais informações</h3>
+      <p>Entre em contato com a nossa equipe</p>
+
+      <p class="whatsapp">
+        <img src="icons/whatsapp.png">
+        (22) 99204-9923
+      </p>
+
+      <p class="email">
+        <img src="icons/email.png">
+        alves5227@gmail.com
+      </p>
+    </div>
+
+    <div class="footer-centro">
+      <img src="imagens/logo_pulsevida.png">
+      <p>Sistema de apoio ao monitoramento de hipertensão</p>
+    </div>
+
+  </div>
+
+</footer>
+<script src="app.js"></script>
+</body>
+</html>

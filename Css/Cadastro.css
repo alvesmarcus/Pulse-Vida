@@ -1,0 +1,160 @@
+/* ===== BODY COM FUNDO ===== */
+body {
+  margin: 0;
+  min-height: 100vh;
+
+  background:
+    linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+    url("../imagens/fundo_login.png");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  font-family: Arial, sans-serif;
+}
+
+/* ===== HEADER ===== */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(10px);
+
+  padding: 15px 30px;
+
+  box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
+
+  z-index: 10;
+}
+
+/* LOGO */
+.logo img {
+  height: 65px;
+  cursor: pointer;
+}
+
+/* ===== CONTAINER ===== */
+.cadastro-container {
+  margin: 120px auto 40px auto;
+
+  background: rgba(255,255,255,0.95);
+  padding: 30px;
+  border-radius: 20px;
+
+  width: 320px;
+
+  box-shadow: 0px 10px 25px rgba(0,0,0,0.3);
+  text-align: center;
+}
+
+/* INPUTS */
+.cadastro-container input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+/* BOTÃO */
+.cadastro-container button {
+  width: 100%;
+  padding: 12px;
+
+  background: #0a84ff;
+  color: white;
+
+  border: none;
+  border-radius: 10px;
+
+  cursor: pointer;
+}
+
+.cadastro-container button:hover {
+  background: #0066cc;
+}
+
+/* 🔔 NOTIFICAÇÃO */
+.notificacao {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+
+  background: #ff3b30;
+  color: white;
+
+  padding: 12px 25px;
+  border-radius: 10px;
+
+  opacity: 0;
+  transition: 0.4s;
+
+  z-index: 9999;
+}
+
+.notificacao.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.notificacao.sucesso {
+  background: #34c759;
+}
+
+
+
+
+
+/* ===== FOOTER ===== */
+.footer {
+  background: linear-gradient(135deg, #1aa39a, #178f87);
+  color: white;
+  padding: 30px;
+  margin-top: 50px;
+}
+
+/* layout */
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1000px;
+  margin: auto;
+  flex-wrap: wrap;
+}
+
+/* contato */
+.footer-contato {
+  text-align: left;
+}
+
+.footer-contato p {
+  margin: 5px 0;
+}
+
+/* icones */
+.whatsapp, .email {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.whatsapp img, .email img {
+  width: 20px;
+}
+
+/* centro */
+.footer-centro {
+  text-align: center;
+}
+
+.footer-centro img {
+  width: 100px;
+  margin-bottom: 10px;
+}

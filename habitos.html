@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="Css/habitos.css">
+<link rel="icon" type="image/png" href="imagens/favicon.png">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#2aa7fa">
+<title>Hábitos</title>
+</head>
+
+<body>
+
+<header class="topo">
+  <button class="btn-voltar" onclick="voltar()">← Voltar</button>
+</header>
+
+<div class="container">
+
+
+
+  <!-- 🔎 FILTRO -->
+  <div class="filtros-box">
+
+  <h3 id="nivelPaciente"></h3>
+
+  <div class="filtros">
+    
+
+    <select id="categoria" onchange="filtrar()">
+      <option value="todas">Todas categorias</option>
+      <option value="alimentacao">Alimentação</option>
+      <option value="exercicio">Exercício</option>
+      <option value="rotina">Rotina</option>
+      <option value="alerta">Alerta</option>
+    </select>
+  </div>
+
+</div>
+  <div id="listaHabitos"></div>
+
+</div>
+
+<script>
+
+
+function voltar(){
+  window.location.href = "aba_a.html";
+}
+// ===============================
+// 🔥 USUÁRIO
+// ===============================
+const cpf = localStorage.getItem("cpfLogado");
+const atendimento = JSON.parse(localStorage.getItem("ultimoAtendimento_" + cpf));
+
+let nivel = atendimento?.nivel || "baixo";
+
+document.getElementById("nivelPaciente").innerText =
+  "Nível atual: " + nivel.toUpperCase();
+
+// ===============================
+// 📋 HÁBITOS COMPLETOS
+// ===============================
+const habitos = {
+
+baixo: [
+  { titulo: "Caminhada leve", desc: "20 a 30 minutos por dia", cat: "exercicio" },
+  { titulo: "Alimentação equilibrada", desc: "Reduzir sal e açúcar", cat: "alimentacao" },
+  { titulo: "Beber água", desc: "2 litros por dia", cat: "rotina" }
+],
+
+medio: [
+  { titulo: "Exercício moderado", desc: "30 min diários", cat: "exercicio" },
+  { titulo: "Evitar industrializados", desc: "Reduzir sódio", cat: "alimentacao" },
+  { titulo: "Dormir bem", desc: "8 horas por noite", cat: "rotina" }
+],
+
+alto: [
+  { titulo: "Monitorar pressão", desc: "Diariamente", cat: "alerta" },
+  { titulo: "Dieta controlada", desc: "Pouco sal", cat: "alimentacao" },
+  { titulo: "Evitar esforço", desc: "Nada intenso", cat: "alerta" }
+],
+
+critico: [
+  { titulo: "Repouso total", desc: "Evitar esforço físico", cat: "alerta" },
+  { titulo: "Ir ao hospital", desc: "Atendimento imediato", cat: "alerta" },
+  { titulo: "Dieta leve", desc: "Alimentos leves", cat: "alimentacao" }
+]
+
+};
+
+// ===============================
+// 🎨 RENDER
+// ===============================
+function render(lista){
+
+  const div = document.getElementById("listaHabitos");
+  div.innerHTML = "";
+
+  if(lista.length === 0){
+    div.innerHTML = "<p>Nenhum hábito encontrado</p>";
+    return;
+  }
+
+  lista.forEach(h => {
+
+    div.innerHTML += `
+      <div class="card">
+
+        <div class="top">
+          <h3>${h.titulo}</h3>
+          <span class="tag ${h.cat}">${h.cat}</span>
+        </div>
+
+        <p>${h.desc}</p>
+
+      </div>
+    `;
+  });
+}
+
+// ===============================
+// 🔎 FILTRO
+// ===============================
+function filtrar(){
+
+  const busca = ""; // campo removido
+  const categoria = document.getElementById("categoria").value;
+
+  let lista = habitos[nivel];
+
+  lista = lista.filter(h => 
+    h.titulo.toLowerCase().includes(busca)
+  );
+
+  if(categoria !== "todas"){
+    lista = lista.filter(h => h.cat === categoria);
+  }
+
+  render(lista);
+}
+
+// inicial
+render(habitos[nivel]);
+
+</script>
+<script src="app.js"></script>
+</body>
+</html>

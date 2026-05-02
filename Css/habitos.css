@@ -1,0 +1,164 @@
+/* ========================= */
+/* 🔥 FUNDO */
+/* ========================= */
+
+body {
+  font-family: Arial;
+  background: 
+    linear-gradient(rgba(0, 123, 255, 0.25), rgba(0, 123, 255, 0.25)),
+    url("../imagens/saude.jpg");
+
+  background-size: cover;
+  background-position: center;
+}
+
+/* ========================= */
+/* 🔥 HEADER */
+/* ========================= */
+
+.topo {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 60px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  padding: 0 20px;
+
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(10px);
+
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+
+  z-index: 10;
+}
+
+.btn-voltar {
+  width: auto; /* 🔥 ESSENCIAL */
+  margin-top: 0;
+
+  background: #2aa7fa;
+  color: white;
+
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-voltar:hover {
+  background: #1d8ed8;
+}
+
+
+.container {
+  width: 80%;
+  margin: 100px auto 30px auto; /* 👈 espaço pro header fixo */
+}
+
+/* 🔎 FILTROS */
+.filtros {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filtros input,
+.filtros select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+/* CARD */
+.card {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* TAGS */
+.tag {
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  color: white;
+}
+
+.tag.alimentacao { background: green; }
+.tag.exercicio { background: blue; }
+.tag.rotina { background: orange; }
+.tag.alerta { background: red; }
+
+
+
+
+/* 🔥 CAIXA DOS FILTROS */
+.filtros-box {
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(10px);
+
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 25px;
+
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* NÍVEL */
+#nivelPaciente {
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+/* FILTROS */
+.filtros {
+  display: flex;
+  gap: 10px;
+}
+
+.filtros input,
+.filtros select {
+  flex: 1;
+  padding: 10px;
+
+  border-radius: 10px;
+  border: 1px solid #ddd;
+
+  background: #f9f9f9;
+  transition: 0.2s;
+}
+
+/* FOCUS BONITO */
+.filtros input:focus,
+.filtros select:focus {
+  outline: none;
+  border: 1px solid #0a84ff;
+  box-shadow: 0 0 5px rgba(10,132,255,0.3);
+}
+
+
+
+#nivelPaciente {
+  margin-bottom: 15px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* CORES POR NÍVEL */
+.nivel-baixo { color: green; }
+.nivel-medio { color: orange; }
+.nivel-alto { color: darkorange; }
+.nivel-critico { color: red; }

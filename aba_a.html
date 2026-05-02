@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="Css/aba_a.css">
+<link rel="icon" type="image/png" href="imagens/favicon.png">
+<title>Paciente</title>
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#2aa7fa">
+</head>
+
+<body>
+
+<header class="topo">
+  <div class="logo-topo">
+    <img src="imagens/logo_pulsevida.png">
+    <span id="nomeUsuario"></span>
+  </div>
+
+  <button onclick="logout()" class="btn-sair">Sair</button>
+</header>
+
+<!-- CARDS -->
+<section class="cards">
+  <div class="card" onclick="irPressao()">
+    <img src="imagens/pressao.png" class="icon">
+    <span>Pressão</span>
+  </div>
+
+  <div class="card" onclick="irAtendimento()">
+    <img src="imagens/atendimento.png" class="icon">
+    <span>Atendimento</span>
+  </div>
+
+  <div class="card" onclick="irMedicamentos()">
+    <img src="imagens/medicamentos.png" class="icon">
+    <span>Medicamentos</span>
+  </div>
+
+  <div class="card" onclick="irHabitos()">
+    <img src="imagens/habitos.png" class="icon">
+    <span>Hábitos</span>
+  </div>
+</section>
+
+<!-- ALERTA -->
+<section class="cards" id="alertaContainer"></section>
+
+<!-- RESUMO -->
+<section class="resumo-banner">
+  <h3>Resumo do Dia</h3>
+
+  <div class="resumo-cards">
+
+    <div class="resumo-box">
+      <img src="imagens/pressao1.png" class="icon-resumo">
+      <h2 id="pressao">-</h2>
+      <p>Última Pressão</p>
+    </div>
+
+    <div class="resumo-box">
+      <img src="imagens/coracao.png" class="icon-resumo">
+      <h2 id="bpm">0</h2>
+      <p>Batimentos</p>
+    </div>
+
+    <div class="resumo-box card-clickable" onclick="abrirModalConsulta()">
+      <img src="imagens/consulta.png" class="icon-resumo">
+      <h2 id="consultas">0</h2>
+      <p>Consultas</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- 🔥 MODAL MODERNO -->
+<div id="modalConsulta" class="modal">
+  <div class="modal-content consulta-moderno">
+
+    <div class="top-modal">
+      <h2>📋 Detalhes da Consulta</h2>
+      <span class="fechar-x" onclick="fecharModalConsulta()">✖</span>
+    </div>
+
+    <div id="statusConsulta" class="status-consulta"></div>
+
+    <div class="item-consulta">
+      <div class="icon">👤</div>
+      <div>
+        <span>Paciente</span>
+        <strong id="modalPaciente"></strong>
+      </div>
+    </div>
+
+    <div class="item-consulta">
+      <div class="icon">🏥</div>
+      <div>
+        <span>Unidade</span>
+        <strong id="modalUnidade"></strong>
+      </div>
+    </div>
+
+    <div class="item-consulta">
+      <div class="icon">📅</div>
+      <div>
+        <span>Data</span>
+        <strong id="modalData"></strong>
+      </div>
+    </div>
+
+    <div class="item-consulta">
+      <div class="icon">⏰</div>
+      <div>
+        <span>Horário</span>
+        <strong id="modalHorario"></strong>
+      </div>
+    </div>
+
+    <button class="btn-fechar-moderno" onclick="fecharModalConsulta()">
+      Fechar
+    </button>
+
+  </div>
+</div>
+
+<script>
+
+// 🔐 PROTEÇÃO
+if (localStorage.getItem("tipoUsuario") !== "paciente") {
+  location.href = "login.html";
+}
+
+const cpf = localStorage.getItem("cpfLogado");
+
+// 🔍 USUÁRIO
+const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+const user = usuarios.find(u => u.cpf === cpf);
+
+if (!user) {
+  alert("Usuário não encontrado");
+  location.href = "login.html";
+}
+
+document.getElementById("nomeUsuario").innerText = "Olá, " + user.nome;
+
+// 🔥 PRESSÃO
+const dados = JSON.parse(localStorage.getItem("dadosSaude_" + cpf));
+if (dados) {
+  document.getElementById("pressao").innerText = dados.pressao || "-";
+  document.getElementById("bpm").innerText = dados.bpm || "0";
+}
+
+// 📅 CONSULTA
+const consulta = JSON.parse(localStorage.getItem("agendamento_" + cpf));
+document.getElementById("consultas").innerText = consulta ? 1 : 0;
+
+// 🔥 MODAL
+function abrirModalConsulta() {
+
+  const consultaRaw = localStorage.getItem("agendamento_" + cpf);
+  const consultaAtual = consultaRaw ? JSON.parse(consultaRaw) : null;
+
+  if (!consultaAtual) {
+    alert("Nenhuma consulta encontrada");
+    return;
+  }
+
+  const status = document.getElementById("statusConsulta");
+
+  if (consultaAtual.status === "confirmado") {
+    status.innerText = "🟢 Consulta Confirmada";
+    status.style.background = "#e6f7ec";
+    status.style.color = "#1e7e34";
+  }
+  else if (consultaAtual.status === "recusado") {
+    status.innerText = "🔴 Consulta Recusada";
+    status.style.background = "#ffe5e5";
+    status.style.color = "red";
+  }
+  else {
+    status.innerText = "🟡 Consulta Pendente";
+    status.style.background = "#fff4e5";
+    status.style.color = "orange";
+  }
+
+  document.getElementById("modalPaciente").innerText = consultaAtual.paciente?.nome || "-";
+  document.getElementById("modalUnidade").innerText = consultaAtual.unidade || "-";
+  document.getElementById("modalData").innerText = consultaAtual.data || "-";
+  document.getElementById("modalHorario").innerText = consultaAtual.horario || "-";
+
+  document.getElementById("modalConsulta").style.display = "flex";
+}
+
+function fecharModalConsulta() {
+  document.getElementById("modalConsulta").style.display = "none";
+}
+
+// 🔗 NAV
+function irPressao() {
+  location.href = "pressao.html";
+}
+
+function irAtendimento() {
+  const dados = JSON.parse(localStorage.getItem("dadosSaude_" + cpf));
+
+  if (!dados || !dados.pressao || dados.pressao === "-") {
+    alert("⚠️ Você só pode entrar no atendimento após medir sua pressão!");
+    return;
+  }
+
+  location.href = "atendimento.html";
+}
+
+function irMedicamentos(){ location.href="medicamentos.html"; }
+function irHabitos(){ location.href="habitos.html"; }
+
+// 🚪 LOGOUT
+function logout(){
+  localStorage.removeItem("cpfLogado");
+  localStorage.removeItem("tipoUsuario");
+  location.href = "login.html";
+}
+
+// 🚨 ALERTA DE URGÊNCIA
+const container = document.getElementById("alertaContainer");
+
+// 🔥 LIMPA SEMPRE
+container.innerHTML = "";
+
+// 🔥 BUSCA DADOS ATUALIZADOS
+const resumoRaw = localStorage.getItem("resumoAtendimento_" + cpf);
+const consultaRaw = localStorage.getItem("agendamento_" + cpf);
+
+const resumo = resumoRaw ? JSON.parse(resumoRaw) : null;
+const consultaAtual = consultaRaw ? JSON.parse(consultaRaw) : null;
+
+// 🔥 SÓ MOSTRA SE NÃO TEM CONSULTA
+if (resumo && !consultaAtual) {
+
+  if (resumo.nivel === "critico") {
+    container.innerHTML = `
+      <div class="card" style="background:#ffe5e5; border:2px solid red;">
+        <h3 style="color:red;">🚨 Estado Crítico</h3>
+        <p>${resumo.mensagem}</p>
+        <button onclick="irAgendamento()" style="background:red; color:white; padding:10px; border:none; border-radius:8px; cursor:pointer;">
+          Ir ao Hospital
+        </button>
+      </div>
+    `;
+  }
+
+  else if (resumo.nivel === "alto") {
+    container.innerHTML = `
+      <div class="card" style="background:#fff4e5; border:2px solid orange;">
+        <h3 style="color:darkorange;">⚠️ Pressão Alta</h3>
+        <p>${resumo.mensagem}</p>
+        <button onclick="irAgendamento()" style="background:darkorange; color:white; padding:10px; border:none; border-radius:8px; cursor:pointer;">
+          Agendar Consulta
+        </button>
+      </div>
+    `;
+  }
+
+  else if (resumo.nivel === "medio") {
+    container.innerHTML = `
+      <div class="card" style="background:#fffbe5; border:2px solid gold;">
+        <h3>Atenção</h3>
+        <p>${resumo.mensagem}</p>
+      </div>
+    `;
+  }
+
+  else if (resumo.nivel === "baixo") {
+    container.innerHTML = `
+      <div class="card" style="background:#e5ffe5; border:2px solid green;">
+        <h3 style="color:green;">Pressão Normal</h3>
+        <p>${resumo.mensagem}</p>
+      </div>
+    `;
+  }
+}
+
+function irAgendamento(){
+  window.location.href = "agendamento.html";
+}
+
+</script>
+
+
+<script src="app.js"></script>
+</body>
+</html>

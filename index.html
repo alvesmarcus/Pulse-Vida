@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="Css/style.css">
+  <link rel="icon" type="image/png" href="imagens/favicon.png">
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#2aa7fa">
+  <title>Pulse Vida</title>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+  <a href="index.html" class="logo">
+    <img src="imagens/logo_pulsevida.png">
+  </a>
+
+  <div class="area-login">
+    <span>Conecte-se aqui</span>
+    <a href="login.html" class="btn-login">Login</a>
+  </div>
+</header>
+
+<!-- TOPO -->
+<section class="container">
+
+  <div class="slider">
+
+    <div class="slides">
+
+      <div class="slide ativo">
+        <h2>PulseVida: Cuidando da sua saúde</h2>
+        <p>
+          O PulseVida é uma solução digital desenvolvida para auxiliar no monitoramento da saúde,
+          com foco em pessoas que convivem com hipertensão. O sistema permite registrar a pressão
+          arterial e acompanhar sua evolução ao longo do tempo..
+        </p>
+      </div>
+
+      <div class="slide">
+        <h2>Saúde em Saquarema</h2>
+        <p>
+          Em Saquarema, muitas pessoas enfrentam dificuldades no acompanhamento da saúde.
+          A falta de monitoramento pode agravar doenças silenciosas como a hipertensão.
+        </p>
+      </div>
+
+      <div class="slide">
+        <h2>Como o PulseVida ajuda</h2>
+        <p>
+          O aplicativo oferece funcionalidades como registro de pressão, localização de hospitais
+          e solicitação de auxílio, promovendo prevenção e acesso mais rápido à saúde.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- 🔥 SETAS EMBAIXO -->
+    <div class="controles">
+      <button onclick="mudarSlide(-1)">⬅</button>
+      <button onclick="mudarSlide(1)">➡</button>
+    </div>
+
+  </div>
+
+  <div class="imagem">
+    <img id="imgSlide" src="imagens/doutora1.avif">
+  </div>
+
+</section>
+
+<!-- FUNCIONALIDADES -->
+<section class="info">
+  <h2>Funcionalidades</h2>
+
+  <div class="cards">
+    <div class="card">
+      <h3>📊 Monitoramento</h3>
+      <p>Controle da pressão arterial.</p>
+    </div>
+
+    <div class="card">
+      <h3>📍 Localização</h3>
+      <p>Hospitais próximos.</p>
+    </div>
+
+    <div class="card">
+      <h3>📅 Agendamento</h3>
+      <p>Organize consultas.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFÍCIOS -->
+<section class="info">
+  <h2>Benefícios</h2>
+
+  <div class="cards">
+    <div class="card">
+      <h3>⚡ Rapidez</h3>
+      <p>Acesso rápido à saúde.</p>
+    </div>
+
+    <div class="card">
+      <h3>❤️ Prevenção</h3>
+      <p>Acompanhamento constante.</p>
+    </div>
+
+    <div class="card">
+      <h3>📱 Acessível</h3>
+      <p>Interface simples.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section class="sobre-container">
+
+  <div class="sobre-texto">
+    <h2>Sobre o Projeto</h2>
+    <p>
+      O PulseVida é uma iniciativa voltada à melhoria da saúde da população de Saquarema, com foco específico no monitoramento e controle da hipertensão arterial. 
+      Considerando que a hipertensão é uma doença silenciosa e de alto risco, o sistema foi desenvolvido para auxiliar os usuários no acompanhamento contínuo da pressão 
+      arterial, permitindo o registro frequente das medições e a visualização do histórico de saúde. Além disso, o aplicativo incentiva a prevenção e o autocuidado, ajudando 
+      os usuários a adotarem hábitos mais saudáveis e a identificarem possíveis alterações nos níveis de pressão.
+    </p>
+  </div>
+
+  <div class="sobre-img">
+    <img src="imagens/saquarema.avif">
+  </div>
+
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+
+  <div class="footer-container">
+
+    <div class="footer-contato">
+      <h3>Para mais informações</h3>
+      <p>Entre em contato com a nossa equipe</p>
+
+      <p class="whatsapp">
+        <img src="icons/whatsapp.png">
+        (22) 99204-9923
+      </p>
+
+      <p class="email">
+        <img src="icons/email.png">
+        alves5227@gmail.com
+      </p>
+    </div>
+
+    <div class="footer-centro">
+      <img src="imagens/logo_pulsevida.png">
+      <p>Sistema de apoio ao monitoramento de hipertensão</p>
+    </div>
+
+  </div>
+
+</footer>
+
+<!-- SCRIPT -->
+<script>
+let slideAtual = 0;
+
+const imagens = [
+  "imagens/doutora1.avif",
+  "imagens/doutora2.avif",
+  "imagens/doutora3.avif"
+];
+
+function mudarSlide(direcao) {
+  const slides = document.querySelectorAll(".slide");
+  const img = document.getElementById("imgSlide");
+
+  // remove slide atual
+  slides[slideAtual].classList.remove("ativo");
+
+  // calcula próximo
+  slideAtual += direcao;
+
+  if (slideAtual < 0) slideAtual = 0;
+  if (slideAtual >= slides.length) slideAtual = slides.length - 1;
+
+  // adiciona novo slide
+  slides[slideAtual].classList.add("ativo");
+
+  // 🔥 FADE DA IMAGEM
+  img.style.opacity = 0;
+
+  setTimeout(() => {
+    img.src = imagens[slideAtual];
+    img.style.opacity = 1;
+  }, 250); // metade do tempo da transição
+}
+
+
+
+
+
+</script>
+<script src="app.js"></script>
+</body>
+</html>

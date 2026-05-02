@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="Css/agendamento.css">
+<link rel="icon" type="image/png" href="imagens/favicon.png">
+<title>Agendamento</title>
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#2aa7fa">
+</head>
+
+<body>
+
+<header class="topo">
+  <button class="btn-voltar" onclick="voltar()">← Voltar</button>
+</header>
+
+<div class="container">
+
+  <div class="card-grid">
+
+  <h2 class="titulo">🏥 Agendar Consulta</h2>
+
+  <!-- ESQUERDA -->
+  <div class="lado-esquerdo">
+
+    <div class="bloco">
+      <h3>🩺 Atendimento Recente</h3>
+        <p><strong>Tipo:</strong> <span id="tipoAtendimento"></span></p>
+        <p><strong>Sintomas:</strong> <span id="sintomas"></span></p>
+        <p><strong>Pressão:</strong> <span id="pressaoAt"></span></p>
+        <p><strong>Batimentos:</strong> <span id="bpmAt"></span></p>
+        <p><strong>Descrição:</strong> <span id="descricaoAt"></span></p>
+    </div>
+
+    <div class="bloco">
+      <h3>👤 Dados do Paciente</h3>
+      <p><strong>Nome:</strong> <span id="nome"></span></p>
+      <p><strong>Email:</strong> <span id="email"></span></p>
+      <p><strong>CPF:</strong> <span id="cpf"></span></p>
+      <p><strong>SUS:</strong> <span id="sus"></span></p>
+      <p><strong>Idade:</strong> <span id="idade"></span></p>
+      <p><strong>Data Nasc:</strong> <span id="dataNascimento"></span></p>
+    </div>
+
+    <div class="bloco">
+      <h3>📍 Endereço</h3>
+      <p><strong>CEP:</strong> <span id="cep"></span></p>
+      <p><strong>Endereço:</strong> <span id="endereco"></span></p>
+      <p><strong>Cidade:</strong> <span id="cidade"></span></p>
+      <p><strong>Estado:</strong> <span id="estado"></span></p>
+    </div>
+
+    <div class="bloco">
+      <h3>📞 Contato</h3>
+      <p><strong>Telefone:</strong> <span id="telefone"></span></p>
+    </div>
+
+  </div>
+
+  <!-- DIREITA -->
+  <div class="lado-direito">
+
+    <label>Unidade de saúde</label>
+    <select id="unidade"></select>
+
+    <label>Data</label>
+    <input type="date" id="data">
+
+    <label>Horário</label>
+    <select id="horario">
+      <option>09:30</option>
+      <option>10:00</option>
+      <option>10:30</option>
+      <option>11:00</option>
+      <option>11:30</option>
+    </select>
+
+    <button onclick="agendar()">Confirmar Agendamento</button>
+
+  </div>
+
+  </div>
+
+</div>
+
+<script>
+
+// 🔥 BLOQUEAR DATAS PASSADAS
+const hoje = new Date().toISOString().split("T")[0];
+document.getElementById("data").setAttribute("min", hoje);
+
+// 🔙 VOLTAR
+function voltar(){
+  window.location.href = "aba_a.html";
+}
+
+// 🔐 USUÁRIO
+const cpfLogado = localStorage.getItem("cpfLogado");
+const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+const user = usuarios.find(u => u.cpf === cpfLogado);
+
+if (!user) {
+  alert("Usuário não encontrado");
+  window.location.href = "login.html";
+}
+
+// 🔥 FUNÇÃO SEGURA
+function setText(id, valor){
+  const el = document.getElementById(id);
+  if(el) el.innerText = valor || "-";
+}
+
+// 👤 DADOS
+setText("nome", user.nome);
+setText("email", user.email);
+setText("cpf", user.cpf);
+setText("sus", user.sus);
+setText("dataNascimento", user.dataNascimento);
+setText("idade", user.idade);
+setText("cep", user.cep);
+setText("endereco", user.endereco + ", " + user.numero);
+setText("cidade", user.cidade);
+setText("estado", user.estado);
+setText("telefone", user.telefone);
+
+// 🩺 ATENDIMENTO
+const atendimento = JSON.parse(localStorage.getItem("ultimoAtendimento_" + cpfLogado));
+
+if (atendimento) {
+  setText("tipoAtendimento", atendimento.tipo);
+  setText("pressaoAt", atendimento.pressao);
+  setText("bpmAt", atendimento.bpm);
+  setText("descricaoAt", atendimento.descricao);
+  setText("sintomas", atendimento.sintomas?.join(", ") || "Nenhum");
+}
+
+// 🏥 UNIDADES
+const unidadeSelect = document.getElementById("unidade");
+
+let unidades = [];
+
+if(user.cep && user.cep.startsWith("28")){
+  unidades = ["UPA Saquarema","Hospital Municipal","Posto Bacaxá"];
+} else {
+  unidades = ["Hospital Central","Clínica Popular","UPA Regional"];
+}
+
+unidades.forEach(u=>{
+  unidadeSelect.innerHTML += `<option>${u}</option>`;
+});
+
+// 📅 AGENDAR
+function agendar(){
+
+  const data = document.getElementById("data").value;
+
+  if(!data){
+    alert("Selecione uma data!");
+    return;
+  }
+
+  const agendamento = {
+    paciente: {
+      nome: user.nome,
+      cpf: user.cpf
+    },
+    unidade: document.getElementById("unidade").value,
+    data,
+    horario: document.getElementById("horario").value,
+    status: "confirmado"
+  };
+
+  localStorage.setItem("agendamento_" + cpfLogado, JSON.stringify(agendamento));
+
+  let consultas = JSON.parse(localStorage.getItem("consultasRealizadas")) || [];
+  consultas = consultas.filter(c => c.paciente.cpf !== cpfLogado);
+  consultas.push(agendamento);
+  localStorage.setItem("consultasRealizadas", JSON.stringify(consultas));
+
+  // 🔥 REMOVE ALERTA
+  delete localStorage["resumoAtendimento_" + cpfLogado];
+
+  alert("Consulta confirmada!");
+
+  // 🔥 REDIRECIONA LIMPO
+  window.location.replace("aba_a.html");
+}
+
+</script>
+<script src="app.js"></script>
+</body>
+</html>

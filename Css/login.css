@@ -1,0 +1,180 @@
+/* ===== BODY COM IMAGEM ===== */
+
+
+
+@media (max-width: 768px) {
+
+  .card-login {
+    width: 90%;
+    padding: 20px;
+  }
+
+  body {
+    padding: 20px;
+  }
+
+}
+body {
+  margin: 0;
+  height: 100vh;
+
+  background-image: url("../imagens/fundo_login.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== HEADER ===== */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
+
+  padding: 15px 30px;
+  z-index: 2;
+}
+
+/* LOGO */
+.logo img {
+  height: 70px;
+  cursor: pointer;
+}
+
+/* ===== CENTRALIZAÇÃO ===== */
+.login-wrapper {
+  min-height: calc(100vh - 100px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ===== CARD LOGIN ===== */
+.login-container {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(6px);
+
+  padding: 40px;
+  border-radius: 25px;
+
+  box-shadow: 0px 10px 25px rgba(0,0,0,0.25);
+
+  width: 320px;
+  text-align: center;
+}
+
+/* LOGO CARD */
+.logo-login {
+  width: 120px;
+  margin-bottom: 10px;
+}
+
+/* TÍTULO */
+.login-container h2 {
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+/* INPUTS */
+.login-container input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+
+  border-radius: 12px;
+  border: 1px solid #ddd;
+
+  font-size: 14px;
+}
+
+/* BOTÃO */
+.login-container button {
+  width: 100%;
+  padding: 12px;
+
+  background: #0a84ff;
+  color: white;
+
+  border: none;
+  border-radius: 12px;
+
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+
+  transition: 0.2s;
+}
+
+.login-container button:hover {
+  background: #0066cc;
+}
+
+/* LINKS */
+.login-container p {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.login-container a {
+  color: #0a84ff;
+  text-decoration: none;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  background: linear-gradient(135deg, #1aa39a, #178f87);
+  color: white;
+  padding: 40px 20px;
+  margin-top: auto;
+}
+
+/* CONTAINER */
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  max-width: 1100px;
+  margin: auto;
+  width: 100%;
+}
+
+/* CONTATO (ESQUERDA) */
+.footer-contato {
+  flex: 1;
+  text-align: left;
+}
+
+.footer-contato p {
+  margin: 6px 0;
+}
+
+/* ÍCONES */
+.whatsapp, .email {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.whatsapp img, .email img {
+  width: 20px;
+}
+
+/* CENTRO (LOGO + ENDEREÇO) */
+.footer-centro {
+  flex: 1;
+  text-align: center;
+}
+
+/* IMAGEM CENTRALIZADA */
+.footer-centro img {
+  display: block;
+  margin: 0 auto 10px auto;
+  width: 100px;
+}
