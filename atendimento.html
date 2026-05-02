@@ -41,13 +41,17 @@
 
 <script>
 
+// 🔒 Segurança básica
 if (localStorage.getItem("tipoUsuario") !== "paciente") {
   window.location.href = "login.html";
 }
 
 const cpf = localStorage.getItem("cpfLogado");
 
+
+// ===============================
 // 🔄 TROCAR SINTOMAS
+// ===============================
 function mudarSintomas() {
 
   const tipo = document.getElementById("tipo").value;
@@ -55,6 +59,7 @@ function mudarSintomas() {
 
   let html = "<label>Sintomas</label><div class='checkbox-group'>";
 
+  // 🟢 CONSULTA GERAL
   if (tipo === "geral") {
     html += `
       <label><input type="checkbox" name="Dor leve" value="baixo"> <span style="color:green">Dor leve</span></label>
@@ -63,6 +68,7 @@ function mudarSintomas() {
     `;
   }
 
+  // 🔴 PRESSÃO
   if (tipo === "pressao") {
     html += `
       <label><input type="checkbox" name="Tontura" value="medio"> <span style="color:orange">Tontura</span></label>
@@ -71,17 +77,41 @@ function mudarSintomas() {
     `;
   }
 
+  // 🟡 TIPOS DE SINTOMAS (AGORA VAI FUNCIONAR)
+  if (tipo === "sintomas") {
+    html += `
+      <label><input type="checkbox" name="Dor de cabeça" value="baixo"> <span style="color:green">Dor de cabeça</span></label>
+      <label><input type="checkbox" name="Enjoo" value="medio"> <span style="color:orange">Enjoo</span></label>
+      <label><input type="checkbox" name="Desmaio" value="alto"> <span style="color:red">Desmaio</span></label>
+    `;
+  }
+
+  // 💊 MEDICAMENTO (AGORA VAI FUNCIONAR)
+  if (tipo === "medicamento") {
+    html += `
+      <label><input type="checkbox" name="Náusea" value="medio"> <span style="color:orange">Náusea</span></label>
+      <label><input type="checkbox" name="Tontura forte" value="alto"> <span style="color:red">Tontura forte</span></label>
+      <label><input type="checkbox" name="Reação alérgica" value="alto"> <span style="color:red">Reação alérgica</span></label>
+    `;
+  }
+
   html += "</div>";
   container.innerHTML = html;
 }
-
 mudarSintomas();
 
 
+// ===============================
 // 🔍 ANALISAR
+// ===============================
 function analisar() {
 
   const checks = document.querySelectorAll("input[type=checkbox]:checked");
+
+  if (checks.length === 0) {
+    alert("Selecione pelo menos um sintoma!");
+    return;
+  }
 
   let nivelFinal = "baixo";
   let sintomasMarcados = [];
@@ -89,49 +119,68 @@ function analisar() {
   checks.forEach(c => {
     sintomasMarcados.push(c.name);
 
-    if (c.value === "alto") nivelFinal = "alto";
-    else if (c.value === "medio" && nivelFinal !== "alto") nivelFinal = "medio";
+    if (c.value === "alto") {
+      nivelFinal = "alto";
+    } else if (c.value === "medio" && nivelFinal !== "alto") {
+      nivelFinal = "medio";
+    }
   });
 
   let mensagem = "";
 
-  if (nivelFinal === "baixo") mensagem = "Tudo certo 👍";
-  if (nivelFinal === "medio") mensagem = "Fique atento ⚠️";
-  if (nivelFinal === "alto") mensagem = "Procure atendimento 🏥";
+  if (nivelFinal === "baixo") mensagem = "Estado estável 👍";
+  if (nivelFinal === "medio") mensagem = "Atenção necessária ⚠️";
+  if (nivelFinal === "alto") mensagem = "Risco elevado — procure atendimento imediato 🏥";
 
-  document.getElementById("nivelUrgencia").innerText = mensagem;
+  const nivelEl = document.getElementById("nivelUrgencia");
+  nivelEl.innerText = mensagem;
 
-  // 🔥 PEGAR DADOS DE PRESSÃO
-  const dados = JSON.parse(localStorage.getItem("dadosSaude_" + cpf));
-  const pressao = dados?.pressao || "-";
-  const bpm = dados?.bpm || "-";
+  // 🎨 Cor visual (impacto pro usuário)
+  if (nivelFinal === "baixo") nivelEl.style.color = "green";
+  if (nivelFinal === "medio") nivelEl.style.color = "orange";
+  if (nivelFinal === "alto") nivelEl.style.color = "red";
+
+  // 🔥 Dados de saúde
+  const dados = JSON.parse(localStorage.getItem("dadosSaude_" + cpf)) || {};
+  const pressao = dados.pressao || "-";
+  const bpm = dados.bpm || "-";
 
   const tipoAtendimento = document.getElementById("tipo").value;
   const descricao = document.getElementById("mensagem").value;
 
-  // 🔥 RESUMO
+  const data = new Date().toLocaleString();
+
+  // 📊 RESUMO
   localStorage.setItem("resumoAtendimento_" + cpf, JSON.stringify({
     nivel: nivelFinal,
     mensagem: mensagem
   }));
 
-  // 🔥 ATENDIMENTO COMPLETO
+  // 📁 ATENDIMENTO COMPLETO
   localStorage.setItem("ultimoAtendimento_" + cpf, JSON.stringify({
     tipo: tipoAtendimento,
     sintomas: sintomasMarcados,
     descricao: descricao,
     pressao: pressao,
     bpm: bpm,
-    nivel: nivelFinal
+    nivel: nivelFinal,
+    data: data
   }));
 
+  // 🔥 Redirecionamento inteligente
   setTimeout(() => {
-    window.location.href = "aba_a.html";
+    if (nivelFinal === "alto") {
+      window.location.href = "agendamento.html";
+    } else {
+      window.location.href = "aba_a.html";
+    }
   }, 1200);
 }
 
 
+// ===============================
 // 🔙 VOLTAR
+// ===============================
 function voltar() {
   window.location.href = "aba_a.html";
 }
