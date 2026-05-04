@@ -349,7 +349,10 @@ body {
 
   .resumo-banner {
     width: 90%;
-  margin: 30px auto;
+    max-width: 350px;
+  margin: 20px auto;
+  display: block;
+
   }
 
   .resumo-cards {
@@ -362,6 +365,10 @@ body {
     align-items: flex-start;
     gap: 10px;
   }
+  .resumo-banner button {
+  width: 100%;
+  margin-top: 10px;
+}
 
 }
 
