@@ -8,7 +8,14 @@
 //    })
 //    .catch(err => console.error('Erro ao registrar SW:', err));
 //}
-
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(registrations => {
+    for (let reg of registrations) {
+      reg.unregister();
+      console.log('SW removido');
+    }
+  });
+}
 // 2. Configura o botão
 function configurarBotao(registration) {
   const btn = document.getElementById('btn-subscribe');
