@@ -387,3 +387,19 @@ body {
   box-shadow: 0 0 5px rgba(42,123,228,0.3);
 }
 
+
+@media (max-width: 768px) {
+
+  .cards-resumo {
+    flex-direction: column;
+  }
+
+  #listaPacientes {
+    grid-template-columns: 1fr;
+  }
+
+  .container-pacientes {
+    width: 95%;
+  }
+
+}

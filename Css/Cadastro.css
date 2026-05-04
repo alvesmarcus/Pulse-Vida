@@ -158,3 +158,17 @@ header {
   width: 100px;
   margin-bottom: 10px;
 }
+
+@media (max-width: 768px) {
+
+  .cadastro-container {
+    width: 90%;
+  }
+
+  .footer-container {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+
+}

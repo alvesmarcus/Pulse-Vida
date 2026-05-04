@@ -66,7 +66,8 @@ body {
   background: rgba(255,255,255,0.95);
   padding: 30px;
   border-radius: 20px;
-  width: 420px;
+  width: 180%;
+  max-width: 420px;
 
   box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 
@@ -107,4 +108,17 @@ textarea {
   border: none;
   border-radius: 12px;
   cursor: pointer;
+}
+
+@media (max-width: 768px) {
+
+  .checkbox-group {
+    grid-template-columns: 1fr;
+  }
+
+  .container {
+    margin-top: 100px;
+    padding: 10px;
+  }
+
 }

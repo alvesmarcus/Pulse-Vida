@@ -43,8 +43,8 @@ body {
   grid-template-columns: 1.4fr 1fr;
   gap: 30px;
 
-  width: 1000px;
-  max-width: 95%;
+  width: 100px;
+  max-width: 1000px;
 
   background: white;
   padding: 30px;
@@ -177,4 +177,17 @@ body {
 
 .btn-voltar:hover {
   background: #1d8ed8;
+}
+
+@media (max-width: 768px) {
+
+  .card-grid {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .container {
+    padding: 10px;
+  }
+
 }
