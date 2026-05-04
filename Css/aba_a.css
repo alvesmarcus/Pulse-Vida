@@ -348,12 +348,14 @@ body {
 }
 
   .resumo-banner {
-    width: 90%;
-    max-width: 350px;
-  margin: 20px auto;
-  display: block;
-
-  }
+  width: 90%;
+  max-width: 400px;
+  margin: 25px auto; /* 🔥 ISSO CENTRALIZA */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 🔥 centraliza conteúdo interno */
+  text-align: center;
+}
 
   .resumo-cards {
     flex-direction: column;
@@ -366,7 +368,8 @@ body {
     gap: 10px;
   }
   .resumo-banner button {
-  width: 100%;
+  width: 80%;
+  max-width: 220px;
   margin-top: 10px;
 }
 
