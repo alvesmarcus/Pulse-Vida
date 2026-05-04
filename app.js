@@ -1,13 +1,13 @@
 // 1. Registra o Service Worker ao carregar a página
-if ('serviceWorker' in navigator && 'PushManager' in window) {
+//if ('serviceWorker' in navigator && 'PushManager' in window) {
 
-  navigator.serviceWorker.register('sw.js')
-    .then(reg => {
-      console.log('SW registrado:', reg.scope);
-      configurarBotao(reg);
-    })
-    .catch(err => console.error('Erro ao registrar SW:', err));
-}
+//  navigator.serviceWorker.register('sw.js')
+//    .then(reg => {
+//      console.log('SW registrado:', reg.scope);
+//      configurarBotao(reg);
+//    })
+//    .catch(err => console.error('Erro ao registrar SW:', err));
+//}
 
 // 2. Configura o botão
 function configurarBotao(registration) {
