@@ -183,11 +183,18 @@ body {
 
   .card-grid {
     grid-template-columns: 1fr;
-    width: 100%;
+    padding: 20px;
+    
+    
   }
 
   .container {
     padding: 10px;
   }
 
+}
+
+.lado-direito,
+.lado-esquerdo {
+  width: 100%;
 }
