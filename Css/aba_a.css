@@ -323,10 +323,24 @@ body {
 
 @media (max-width: 768px) {
 
-  .cards {
-    flex-direction: column;
-    align-items: center;
-  }
+  .card {
+  width: 85%;
+  max-width: 320px;
+  padding: 25px;
+  font-size: 16px;
+}
+
+.icon {
+  width: 55px;
+  height: 55px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  padding: 0 10px;
+}
 
   .resumo-banner {
     width: 95%;
@@ -344,3 +358,4 @@ body {
   }
 
 }
+
